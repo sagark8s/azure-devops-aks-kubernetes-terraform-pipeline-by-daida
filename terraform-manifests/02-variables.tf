@@ -7,7 +7,7 @@
 variable "location" {
   type = string
   description = "Azure Region where all these resources will be provisioned"
-  default = "eastus"
+  default = "centralus"
 }
 
 # Azure Resource Group Name
