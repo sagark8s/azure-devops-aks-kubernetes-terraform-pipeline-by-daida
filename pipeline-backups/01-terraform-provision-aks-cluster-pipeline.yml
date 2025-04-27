@@ -40,7 +40,7 @@ stages:
           backendType: 'azurerm'
           backendServiceArm: 'Pay-As-You-Go (2e1f0266-b121-401e-bd5f-aa8900f02643)'
           backendAzureRmResourceGroupName: 'terraform-storage-rg'
-          backendAzureRmStorageAccountName: 'terraformstatexlrwdrzs'
+          backendAzureRmStorageAccountName: 'terraformstatexlrwdrz'
           backendAzureRmContainerName: 'tfstatefiles'
           backendAzureRmKey: 'aks-base.tfstate'
           allowTelemetryCollection: false
@@ -83,7 +83,7 @@ stages:
                 backendType: 'azurerm'
                 backendServiceArm: 'Pay-As-You-Go (2e1f0266-b121-401e-bd5f-aa8900f02643)'
                 backendAzureRmResourceGroupName: 'terraform-storage-rg'
-                backendAzureRmStorageAccountName: 'terraformstatexlrwdrzs'
+                backendAzureRmStorageAccountName: 'terraformstatexlrwdrz'
                 backendAzureRmContainerName: 'tfstatefiles'
                 backendAzureRmKey: 'aks-$(DEV_ENVIRONMENT).tfstate'
                 allowTelemetryCollection: false
@@ -134,7 +134,7 @@ stages:
                 backendType: 'azurerm'
                 backendServiceArm: 'Pay-As-You-Go (2e1f0266-b121-401e-bd5f-aa8900f02643)'
                 backendAzureRmResourceGroupName: 'terraform-storage-rg'
-                backendAzureRmStorageAccountName: 'terraformstatexlrwdrzs'
+                backendAzureRmStorageAccountName: 'terraformstatexlrwdrz'
                 backendAzureRmContainerName: 'tfstatefiles'
                 backendAzureRmKey: 'aks-$(QA_ENVIRONMENT).tfstate'
                 allowTelemetryCollection: false
