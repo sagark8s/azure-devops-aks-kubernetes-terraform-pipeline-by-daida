@@ -4,25 +4,20 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-# Define Variables for Environments
+# Variables
 variables:
 - name: DEV_ENVIRONMENT
   value: dev
 - name: QA_ENVIRONMENT
   value: qa  
 
-# Stage-1: Terraform Validate Stage
+# Stage 1: Terraform Validate
 stages:
 - stage: TerraformValidate
   jobs:
     - job: TerraformValidateJob
       continueOnError: false
       steps:
-      - task: UseTerraformVersion@0
-        displayName: 'Install Terraform'
-        inputs:
-          version: '1.5.7'    # You can also use 'latest' if you want
-          
       - task: PublishPipelineArtifact@1
         displayName: Publish Artifacts
         inputs:
@@ -50,7 +45,7 @@ stages:
           workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-manifests'
           allowTelemetryCollection: false
 
-# Stage-2: Deploy Stages for Dev & QA
+# Stage 2: Deploy AKS Clusters
 - stage: DeployAKSClusters
   jobs:
     - deployment: DeployDevAKSCluster
@@ -61,7 +56,7 @@ stages:
       strategy:
         runOnce:
           deploy:
-            steps:            
+            steps:
             - task: DownloadSecureFile@1
               displayName: Download SSH Key
               name: sshkey
@@ -108,7 +103,7 @@ stages:
       strategy:
         runOnce:
           deploy:
-            steps:            
+            steps:
             - task: DownloadSecureFile@1
               displayName: Download SSH Key
               name: sshkey
