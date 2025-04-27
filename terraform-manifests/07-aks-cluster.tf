@@ -33,14 +33,15 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
   # Identity (System Assigned or Service Principal)
   identity { type = "SystemAssigned" }
 
-  # Azure Policy and OMS Agent (move to top level)
-  azure_policy {
-    enabled = true
-  }
-
-  oms_agent {
-    enabled                    = true
-    log_analytics_workspace_id = azurerm_log_analytics_workspace.insights.id
+  # Addon Profile for deprecated features
+  addon_profile {
+    azure_policy {
+      enabled = true
+    }
+    oms_agent {
+      enabled                    = true
+      log_analytics_workspace_id = azurerm_log_analytics_workspace.insights.id
+    }
   }
 
   # Windows Admin Profile
@@ -69,6 +70,7 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
   tags = {
     Environment = var.environment
   }
+
 ## RBAC and Azure AD Integration Block
 #role_based_access_control {
   #enabled = true
@@ -78,7 +80,3 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
   #}
 #}
 }
-
-
- 
-
