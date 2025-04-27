@@ -6,7 +6,6 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
   kubernetes_version  = data.azurerm_kubernetes_service_versions.current.latest_version
   node_resource_group = "${azurerm_resource_group.aks_rg.name}-nrg"
 
-
   default_node_pool {
     name       = "systempool"
     vm_size    = "Standard_DS2_v2"
@@ -31,18 +30,45 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
     }    
   }
 
-# Identity (System Assigned or Service Principal)
+  # Identity (System Assigned or Service Principal)
   identity { type = "SystemAssigned" }
 
-# Add On Profiles
-  addon_profile {
-    azure_policy { enabled = true }
-    oms_agent {
-      enabled                    = true
-      log_analytics_workspace_id = azurerm_log_analytics_workspace.insights.id
+  # Azure Policy and OMS Agent (move to top level)
+  azure_policy {
+    enabled = true
+  }
+
+  oms_agent {
+    enabled                    = true
+    log_analytics_workspace_id = azurerm_log_analytics_workspace.insights.id
+  }
+
+  # Windows Admin Profile
+  windows_profile {
+    admin_username            = var.windows_admin_username
+    admin_password            = var.windows_admin_password
+  }
+
+  # Linux Profile
+  linux_profile {
+    admin_username = "ubuntu"
+    ssh_key {
+        key_data = file(var.ssh_public_key)
     }
   }
 
+  # Network Profile
+  network_profile {
+    load_balancer_sku = "standard"
+    network_plugin = "azure"
+    service_cidr       = "10.1.0.0/16"    # <-- Different from your subnet 10.0.0.0/16
+    dns_service_ip     = "10.1.0.10"      # <-- Must be inside service_cidr range
+  }
+
+  # AKS Cluster Tags 
+  tags = {
+    Environment = var.environment
+  }
 ## RBAC and Azure AD Integration Block
 #role_based_access_control {
   #enabled = true
@@ -50,34 +76,9 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
     #managed                = true
     #admin_group_object_ids = [azuread_group.aks_administrators.id]
   #}
-#}  
-
-# Windows Admin Profile
-windows_profile {
-  admin_username            = var.windows_admin_username
-  admin_password            = var.windows_admin_password
-}
-
-# Linux Profile
-linux_profile {
-  admin_username = "ubuntu"
-  ssh_key {
-      key_data = file(var.ssh_public_key)
-  }
-}
-
-# Network Profile
-network_profile {
-  load_balancer_sku = "standard"
-  network_plugin = "azure"
-  service_cidr       = "10.1.0.0/16"    # <-- Different from your subnet 10.0.0.0/16
-  dns_service_ip     = "10.1.0.10"      # <-- Must be inside service_cidr range
-}
-
-# AKS Cluster Tags 
-tags = {
-  Environment = var.environment
+#}
 }
 
 
-}
+ 
+
