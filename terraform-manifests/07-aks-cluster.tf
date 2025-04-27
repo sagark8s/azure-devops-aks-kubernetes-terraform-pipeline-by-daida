@@ -3,7 +3,8 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
   location            = azurerm_resource_group.aks_rg.location
   name                = "${azurerm_resource_group.aks_rg.name}-cluster"
   resource_group_name = azurerm_resource_group.aks_rg.name
-  kubernetes_version  = data.azurerm_kubernetes_service_versions.current.latest_version
+  kubernetes_version  = 1.31
+  #kubernetes_version  = data.azurerm_kubernetes_service_versions.current.latest_version
   node_resource_group = "${azurerm_resource_group.aks_rg.name}-nrg"
 
   default_node_pool {
